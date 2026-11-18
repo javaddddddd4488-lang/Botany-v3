@@ -12,7 +12,7 @@
     {
       "binding": "DB",
       "database_name": "botany-db",
-      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID",
+      "database_id": "7f6e9aa2-61ba-4406-bbd9-3ed2e20e495b",
       "migrations_dir": "migrations"
     }
   ]
