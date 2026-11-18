@@ -1,0 +1,19 @@
+{
+  "name": "botanical-research-database",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "vendor": "node scripts/vendor.mjs",
+    "predev": "npm run vendor",
+    "dev": "wrangler dev",
+    "predeploy": "npm run vendor",
+    "deploy": "wrangler deploy",
+    "db:migrate:local": "wrangler d1 migrations apply botany-db --local",
+    "db:migrate:remote": "wrangler d1 migrations apply botany-db --remote"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  }
+}
