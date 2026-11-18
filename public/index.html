@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#12372A">
+  <meta name="description" content="A botanical research database for plant species and field observations.">
+  <title>Dr. Moradi’s Botanical Research Database</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/sfx.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+
+  <section id="loginView" class="login-shell">
+    <div class="login-art" aria-hidden="true">
+      <svg class="plant" viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path class="draw d0" pathLength="1" d="M32 54V15"/>
+        <path class="draw d1" pathLength="1" d="M32 41c9 0 15-5 17-13-9 0-16 4-17 13Z"/>
+        <path class="draw d2" pathLength="1" d="M32 33c-9 0-15-5-17-13 9 0 16 4 17 13Z"/>
+        <path class="draw d3" pathLength="1" d="M32 15c-4 5-4 11 0 16 4-5 4-11 0-16Z"/>
+        <path class="draw d4 vein" pathLength="1" d="M32 41c5-1 10-4 14-9M32 33c-5-1-10-4-14-9"/>
+        <path class="draw d0" pathLength="1" d="M21 54h22"/>
+        <circle class="bud" cx="32" cy="9" r="2.6"/>
+      </svg>
+      <p class="art-caption">Herbarium sheet<br>Dr. Aiuob Moradi</p>
+    </div>
+    <div class="login-panel">
+      <button type="button" class="sound-toggle" aria-pressed="true" aria-label="Sound effects"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path class="waves" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/><path class="slash" d="M17 9l5 6M22 9l-5 6"/></svg></button>
+      <div class="login-card">
+        <img src="/logo.svg" class="login-logo" alt="Botanical Research Database logo">
+        <h1>Dr. Aiuob Moradi’s Botanical Database</h1>
+        <p class="intro">Personal research catalogue of plant species and field records. Access is restricted.</p>
+        <form id="loginForm">
+          <label for="password">Access password</label>
+          <div class="password-row">
+            <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your access password" required>
+            <button id="togglePassword" type="button" class="icon-button" aria-label="Show password">Show</button>
+          </div>
+          <button class="primary-button full" type="submit">Open the database</button>
+          <p id="loginError" class="error-message" role="alert"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <div id="appView" hidden>
+    <header class="topbar">
+      <a class="brand" href="#" id="homeLink"><img src="/logo.svg" alt=""><span><b>Botanical</b><small>Research database</small></span></a>
+      <div class="top-actions">
+        <button type="button" class="sound-toggle" aria-pressed="true" aria-label="Sound effects"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path class="waves" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/><path class="slash" d="M17 9l5 6M22 9l-5 6"/></svg></button>
+        <span id="roleBadge" class="role-badge">Member</span>
+        <button id="logoutButton" class="quiet-button">Sign out</button>
+      </div>
+    </header>
+    <main class="page-wrap">
+      <section class="page-heading">
+        <div><h1>Dr. Aiuob Moradi</h1><p class="muted">Search by scientific name or any recorded field.</p></div>
+        <div class="record-count"><strong id="recordCount">0</strong><span>records</span></div>
+      </section>
+      <section class="search-panel">
+        <label class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg><input id="searchInput" type="search" placeholder="Search species, family, locality…" autocomplete="off" dir="auto" maxlength="200"><button id="clearSearch" type="button" aria-label="Clear search">×</button></label>
+      </section>
+      <section id="adminPanel" class="admin-panel" hidden>
+        <div class="panel-heading"><h2>Manage research data</h2><span class="admin-tag">Admin</span></div>
+        <p class="muted">Import an Excel workbook. The first row of the selected worksheet must contain column headings. Importing replaces the current catalogue.</p>
+        <form id="importForm" class="import-form">
+          <label class="file-picker"><span class="file-symbol">+</span><span><b id="fileLabel">Choose Excel workbook</b><small>.xlsx or .xls · max 15 MB · 50,000 rows</small></span><input id="excelFile" type="file" accept=".xlsx,.xls" required></label>
+          <select id="sheetSelect" class="sheet-select" aria-label="Worksheet" hidden></select>
+          <button class="primary-button" type="submit">Import data</button>
+        </form>
+        <p id="importStatus" class="status-message" role="status"></p>
+        <p id="metaLine" class="meta-line"></p>
+      </section>
+      <section id="resultsSection" class="results-section">
+        <div class="section-heading"><h2>Catalogue</h2><span id="resultSummary" class="muted">All records</span></div>
+        <div id="resultsGrid" class="results-grid"></div>
+        <button id="loadMore" type="button" class="quiet-button load-more" hidden>Load more records</button>
+        <div id="emptyState" class="empty-state" hidden><svg class="empty-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg><h3>No records found</h3><p>Try a different spelling or fewer words. If the catalogue is empty, an administrator needs to import a workbook.</p></div>
+      </section>
+      <section id="detailView" class="detail-view" hidden>
+        <button id="backButton" class="quiet-button back-button">Back to catalogue</button>
+        <article id="detailCard" class="detail-card"></article>
+      </section>
+    </main>
+    <footer><span><img src="/logo.svg" alt=""> Botanical Research Database</span></footer>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
